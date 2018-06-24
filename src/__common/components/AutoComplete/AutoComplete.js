@@ -46,7 +46,7 @@ class AutoComplete extends PureComponent {
         if (!isBlurListened) {
             return
         }
-        // this.setState({ isOpen: false });
+        this.setState({ isOpen: false });
         const { onBlur } = this.props.inputProps;
         if (onBlur) {
             onBlur(event)
@@ -82,11 +82,8 @@ class AutoComplete extends PureComponent {
         this.props.onClick(value, item));
     };
 
-    /***
-     * Blur br
-     * Need to ignore blur right before click on item
-     * (otherwise items will be closed before onClick handled)
-     */
+    // Need to ignore blur right before click on item
+    // (otherwise items will be closed before onClick handled)
     ignoreBlur = () => this.setState({ isBlurListened: false });
 
     listenBlur = () => this.setState({ isBlurListened: true });
@@ -145,14 +142,22 @@ AutoComplete.propTypes = {
      */
     items: PropTypes.array.isRequired,
     /***
-     * Args: item
+     * Args: item: any
      * Used to get the title for display in `items`.
      */
     getItemTitle: PropTypes.func.isRequired,
     /***
      * Input value
      */
-    value: PropTypes.any,
+    value: PropTypes.string,
+    /***
+     * Props for input component
+     */
+    inputProps: PropTypes.object,
+    /***
+     * Args event: event, value: string
+     * Used to handle input change
+     */
     onChange: PropTypes.func,
     /***
      * Args value: string, item: any
@@ -163,8 +168,17 @@ AutoComplete.propTypes = {
      * Styles for overriding
      */
     style: PropTypes.shape({
+        /***
+         * The style for highlighted item
+         */
         highlightedStyle: PropTypes.object,
+        /***
+         * The style for each item
+         */
         itemStyle: PropTypes.object,
+        /***
+         * The style for items block
+         */
         itemsStyle: PropTypes.object
     })
 };
@@ -185,7 +199,9 @@ AutoComplete.defaultProps = {
             maxHeight: '300px',
             backgroundColor: '#f7f9fa'
         }
-    }
+    },
+    onClick: () => {},
+    onChange: () => {}
 };
 
 export default AutoComplete;
